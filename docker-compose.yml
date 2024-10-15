@@ -1,0 +1,33 @@
+# version: '3' # not necessary in docker-compose v2
+services:
+  mysqldb:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: mydatabase
+    ports:
+      - "3306:3306"
+    expose: # opens port on container
+      - 3306
+    volumes: # were data will be persisted
+      - ./mysql_data:/var/lib/mysql
+
+  teste-rickandmorty-compose:
+    build: .
+    command: poetry run python pdi_rickandmorty/main.py
+    ports:
+      - "8501:8501"
+    depends_on:
+      - mysqldb
+    environment:
+      - MYSQL_HOST=mysqldb
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=rickandmortydb
+    volumes:
+      - .:/src
+
+volumes:
+  mysql_data:
