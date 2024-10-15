@@ -137,7 +137,7 @@ def main():
 
     # Get data from API
     data = {key: get_api_data(url) for key, url in api_url.items()}
-    
+
     # Normalize the JSON data into pandas DataFrames
     df = {key: pd.json_normalize(value) for key, value in data.items()}
 
